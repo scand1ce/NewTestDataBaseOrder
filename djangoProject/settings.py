@@ -13,7 +13,7 @@ SECRET_KEY = '$q=@&x-z@3oi-ui+(%&ww(f(3jqw-_l=%(m-d-uqi!!+y)c@r3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -25,7 +25,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'order.apps.OrderConfig'
+    'order.apps.OrderConfig',
+
+    'crispy_forms',
+    'django_extensions',
+
 ]
 
 MIDDLEWARE = [
@@ -111,3 +115,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+SHELL_PLUS = "IPython"

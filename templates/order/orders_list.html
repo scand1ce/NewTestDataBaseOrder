@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% load orders_tags %}
+
+{% block title %}Отчет по дате{% endblock title %}
+
+{% block content %}
+
+
+
+<div class="card" style="background-color: #16181b ">
+    <div class="card-body">
+        <div class="main-container">
+            <div class="container p-3" style="color: green" align="center">
+
+            <form method="GET" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <h2>Отчет по диапазону дат</h2>
+                <font style="color: red"><b>От:</b></font><input type="date" name="fromdate" required>
+                <font style="color: red"><b>До: </b></font><input type="date" name="todate" required>
+                <input type="submit" value="Генерировать отчет" class="btn btn-danger">
+
+                </form>
+                 <input class="btn btn-dark" type="button" value="Вернуться назад"
+                        onclick="location.href='{% url 'orders_list'  %}'">
+            </div>
+
+            <div class="bg-primary m-2">
+                <h3 class="text-md-center"
+                    style="background-color: #383d41"><font color="white">Cписок всех заказов с товарами</font></h3>
+                    <h4 style="background-color: #383d41">
+
+                </h4>
+
+                <div class="badge-dark">
+                    <div class="table-responsive-lg">
+                        <table  class="table table-dark"
+                               style="background-color: #16181b ">
+                            <thead>
+                            <tr style="color: green">
+
+                                <th class="col-xs-2">Дата заказа</th>
+                                <th class="col-xs-2">Номер заказа</th>
+                                <th class="col-xs-2">Сумма</th>
+                                <th class="col-xs-2">Товары</th>
+
+
+                            </tr>
+                            </thead>
+                                {% for item in items %}
+                            <tbody>
+                                <tr>
+                                <td>{{ item.create_date }}</td>
+                                <td>{{ item.number }}</td>
+                                <td>{{ item.num }}</td>
+                                <td>Имя товара: {{ item.product_count }} - шт.</td>
+                                {% endfor %}
+
+                            </tr>
+
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+        table {
+            width: 1500px; /* Ширина таблицы */
+            margin: auto; /* Выравниваем таблицу по центру */
+        }
+
+
+        td,th {
+            border: 2px solid; /* Рамка вокруг таблицы */
+            text-align: center; /* Выравниваем текст по центру ячейки */
+
+        }
+
+
+    </style>
+
+
+{% endblock content %}
