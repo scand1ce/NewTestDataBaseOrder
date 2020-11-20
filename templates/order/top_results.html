@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}ТОП 20{% endblock title %}
+
+{% block content %}
+
+<h1 style="color: red" class="">ТОПЧИК</h1>
+
+<input class="btn btn-danger" type="button" value="Назад"
+       onclick="location.href='{% url 'orders_list'  %}'">
+
+<div class="card" style="background-color: #16181b ">
+    <div class="card-body">
+        <div class="main-container">
+            <div class="container p-3" style="color: green" align="center">
+                <hr style="background-color: white">
+                <h1 style="color: white">Количество запросов - {{ queries|length }}</h1>
+                <hr style="background-color: white">
+
+
+               <table class="table table-dark"
+                       style="background-color: #16181b ">
+                    <thead>
+                    <tr style="color: green">
+
+                        <th class="col-xs-2">Имя товара</th>
+                        <th class="col-xs-2">Данные</th>
+
+
+
+                    </tr>
+                    </thead>
+                    <tbody align="center">
+                    {% for i in items %}
+
+                    <tr>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.concat_ }}</td>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<hr style="background-color: white">
+
+
+<style>
+
+        table {
+            width: 1500px; /* Ширина таблицы */
+            margin: auto; /* Выравниваем таблицу по центру */
+        }
+
+
+        td,th {
+            border: 2px solid; /* Рамка вокруг таблицы */
+            text-align: center; /* Выравниваем текст по центру ячейки */
+
+        }
+
+
+
+
+</style>
+
+
+{% endblock content %}

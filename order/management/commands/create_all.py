@@ -21,7 +21,7 @@ class Command(BaseCommand):
         for num in range(1, orders + 1):
             Order.objects.create(
                 number=num,
-                create_date=first_date + datetime.timedelta(days=num, hours=num)
+                create_date=first_date + datetime.timedelta(days=num-1, hours=num-1)
             )
 
         for item in Order.objects.all():

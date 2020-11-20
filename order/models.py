@@ -8,6 +8,10 @@ class Order(models.Model):
     def __str__(self):
         return str(self.number)
 
+    class Meta:
+        ordering = ['-create_date']
+
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product_name = models.CharField(max_length=100)
@@ -17,5 +21,3 @@ class OrderItem(models.Model):
     def __str__(self):
         return str(self.product_name)
 
-    class Meta:
-        ordering = ['-order']
