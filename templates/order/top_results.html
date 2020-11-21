@@ -1,18 +1,16 @@
 {% extends 'base.html' %}
 
-{% load crispy_forms_tags %}
-
-
-
-{% block title %}ТОП 20{% endblock title %}
+{% block title %}Топчик{% endblock title %}
 
 {% block content %}
+<div class="container" align="center">
+<h2 style="color: red" class="">ТОП </h2>
+    <h2 style="color: red" class="">среди всех товаров</h2>
 
-<h1 style="color: red" class="">ТОПЧИК</h1>
 
 <input class="btn btn-danger" type="button" value="Назад"
        onclick="location.href='{% url 'orders_list'  %}'">
-
+</div>
 <div class="card" style="background-color: #16181b ">
     <div class="card-body">
         <div class="main-container">
@@ -20,6 +18,27 @@
                 <hr style="background-color: white">
                 <h1 style="color: white">Количество запросов - {{ queries|length }}</h1>
                 <hr style="background-color: white">
+                 <table class="table table-dark"
+                       style="background-color: #16181b ">
+                    <thead>
+            <h2></h2>
+                    </thead>
+                    <tbody align="center">
+
+
+                    <tr>
+                        <td><font style="color: blue">Самый продаваемый товар</font>
+                           <font style="color: yellow">{{ product_name }} - {{ all_amount__max }}
+                            - шт.</font></td>
+
+
+                       <td><font style="color: blue">Итого по всем заказам:</font>
+                             <font style="color: yellow">{{ sum_num__max }} $</font></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
 
 
                <table class="table table-dark"
@@ -29,7 +48,7 @@
 
                         <th class="col-xs-2">Имя товара</th>
                         <th class="col-xs-2">Данные</th>
-
+                    </tr>
 
 
                     </tr>
@@ -40,7 +59,7 @@
                     <tr>
                         <td>{{ i.name }}</td>
                         <td>{{ i.concat_ }}</td>
-
+                    </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -68,9 +87,6 @@
             text-align: center; /* Выравниваем текст по центру ячейки */
 
         }
-
-
-
 
 </style>
 

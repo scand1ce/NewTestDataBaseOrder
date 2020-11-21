@@ -1,4 +1,4 @@
-# from django.db import connection, reset_queries
+from django.db import connection, reset_queries
 from django.db.models import *
 from django.db.models.functions import Concat
 from django.shortcuts import render
@@ -32,54 +32,53 @@ class OrderListView(ListView):
                                            )
                       ).filter(create_date__gte=fromdate, create_date__lte=todate)
 
-        return render(request, 'order/orders_list.html', {'data': between_data})
+        queries = connection.queries
+        reset_queries()
+        return render(
+            request, 'order/orders_list.html', {
+                'data': between_data, 'queries': queries, 'fromdate': fromdate, 'todate': todate
+            }
+        )
 
 
-class ResultListView(ListView):
-    model = Order
+class ResultListView(OrderListView):
     success_url = reverse_lazy('top_results')
     template_name = 'order/top_results.html'
 
+
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        fromdate = self.request.GET.get('fromdate')
+        todate = self.request.POST.get('todate')
+        print(fromdate, '|||||||||', todate)
         orders_set_sorted = OrderItem.objects.all() \
             .annotate(name=Concat(Value('Товар - '), 'product_name', output_field=CharField())) \
             .annotate(concat=Concat(Value('Заказ -  '), 'order__number',
                                     Value(',  Цена -  '), 'product_price',
                                     Value(',  Дата -  '), 'order__create_date',
+                                    Value(',  Количество -  '), 'amount',
                                     output_field=CharField())) \
-            .order_by('-product_name')
+            #.filter(order__create_date__gte=fromdate, order__create_date__lte=todate)
 
-        queryset = orders_set_sorted.values('name').order_by('name') \
+        queryset = orders_set_sorted.values('name').order_by('-name') \
             .annotate(
             concat_=StringAgg('concat', delimiter='; '),
             customer_name=F('name')
         )
+        top_amount = queryset.values('name') \
+            .annotate(all_amount=ExpressionWrapper(Sum("amount"), output_field=CharField())) \
+            .aggregate(Max('all_amount'))['all_amount__max']
 
-        context['items'] = queryset
+        top_product = queryset.values('name') \
+            .annotate(sum_num=ExpressionWrapper(F("amount") * F('product_price'), output_field=DecimalField()))
+
+        top_product_max = top_product.order_by('order__id').aggregate(Max('sum_num'))['sum_num__max']
+
+        queries = connection.queries
+        reset_queries()
+        context = {
+            "items": queryset,
+            "queries": queries,
+            'sum_num__max': top_product_max,
+            'all_amount__max': top_amount
+        }
         return context
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-orders_amount_sum = sum([OrderItem.objects.filter(product_name=item).aggregate(Sum('amount'))['amount__sum']
-                                 for item in orders_set_sorted])
-#OrderItem.objects.order_by('product_name', 'order__number').distinct('product_name')
-        a = OrderItem.objects.select_related("order").all()"""

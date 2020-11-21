@@ -16,6 +16,7 @@
                 <hr style="background-color: white">
 
 
+
                 <form method="POST">
                     {% csrf_token %}
                     <h2>Отчет по диапазону дат</h2>
@@ -29,10 +30,12 @@
                     <input class="btn btn-dark" type="button" value="Очистить"
                            onclick="location.href='{% url 'orders_list'  %}'">
                 </form>
-
+                <h1><font style="color: red">От: {{ fromdate }}
+                    <font style="color: green">||||</font>
+                    До: {{ todate  }}</font></h1>
 
                 <hr style="background-color: white">
-                <h1 style="color: white">COUNT  -  {{ queries|length }}</h1>
+                <h1 style="color: white">Количество запросов - {{ queries|length }}</h1>
 
                 <input class="btn btn-danger" type="button" value="ТОПЧИК"
                            onclick="location.href='{% url 'top_results'  %}'">
