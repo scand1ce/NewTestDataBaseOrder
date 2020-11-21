@@ -5,7 +5,7 @@ from order.models import Order, OrderItem
 
 
 class Command(BaseCommand):
-    help = u'Создание случайных заказов в БД'
+    help = u'Создание случайных заказов с товарами в БД'
 
     def add_arguments(self, parser):
         parser.add_argument('orders', type=int, help=u'Количество создаваемых заказов (товары для заказов'
@@ -16,12 +16,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         orders = kwargs['orders']
-        first_date = datetime.datetime(day=1, month=1, year=2018, hour=9, minute=0)
+        first_date = datetime.datetime(year=2017, month=12, day=31,  hour=8, minute=0)
 
         for num in range(1, orders + 1):
             Order.objects.create(
                 number=num,
-                create_date=first_date + datetime.timedelta(days=num-1, hours=num-1)
+                create_date=first_date + datetime.timedelta(days=num, hours=num)
             )
 
         for item in Order.objects.all():

@@ -24,6 +24,8 @@ class OrderListView(ListView):
             return render(request, 'order/orders_list.html', {'data': data})
         fromdate = request.POST.get('fromdate')
         todate = request.POST.get('todate')
+        request.session['fromdate'] = fromdate
+        request.session['todate'] = todate
         between_data = Order.objects.all() \
             .annotate(sum_num=ExpressionWrapper(F("items__amount") * F('items__product_price'),
                                                 output_field=DecimalField())) \
@@ -45,11 +47,10 @@ class ResultListView(OrderListView):
     success_url = reverse_lazy('top_results')
     template_name = 'order/top_results.html'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        fromdate = self.request.session['fromdate']
+        todate = self.request.session['todate']
 
-    def get_context_data(self, **kwargs):
-        fromdate = self.request.GET.get('fromdate')
-        todate = self.request.POST.get('todate')
-        print(fromdate, '|||||||||', todate)
         orders_set_sorted = OrderItem.objects.all() \
             .annotate(name=Concat(Value('Товар - '), 'product_name', output_field=CharField())) \
             .annotate(concat=Concat(Value('Заказ -  '), 'order__number',
@@ -57,7 +58,7 @@ class ResultListView(OrderListView):
                                     Value(',  Дата -  '), 'order__create_date',
                                     Value(',  Количество -  '), 'amount',
                                     output_field=CharField())) \
-            #.filter(order__create_date__gte=fromdate, order__create_date__lte=todate)
+            .filter(order__create_date__gte=fromdate, order__create_date__lte=todate)
 
         queryset = orders_set_sorted.values('name').order_by('-name') \
             .annotate(
