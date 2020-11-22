@@ -13,10 +13,8 @@ django-crispy-forms = "*"
 psycopg2-binary = "*"
 django-extensions = "*"
 ipython = "*"
-django-heroku = "*"
 pip = "*"
-Pillow = "*"
-
+django-bootstrap4 = "*"
 
 [requires]
 python_version = "3.8"
