@@ -77,7 +77,7 @@ class ResultListView(OrderListView):
         queries = connection.queries
         reset_queries()
         context = {
-            "items": queryset,
+            "items": queryset[:100],
             "queries": queries,
             'sum_num__max': top_product_max,
             'all_amount__max': top_amount
