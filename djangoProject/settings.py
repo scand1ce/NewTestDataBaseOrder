@@ -13,7 +13,7 @@ SECRET_KEY = '$q=@&x-z@3oi-ui+(%&ww(f(3jqw-_l=%(m-d-uqi!!+y)c@r3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['0.0.0.0:8000', 'localhost', '127.0.0.1:8000']
 
 
 # Application definition
